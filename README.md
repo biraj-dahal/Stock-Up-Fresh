@@ -72,4 +72,11 @@
   * -> 🔙 Return to previous screen  
 
 - **Settings/Profile**  
-  * -> ⚙️ Manage account, reminders, calendar, and inventory thresholds  
+  * -> ⚙️ Manage account, reminders, calendar, and inventory thresholds
+
+## 4. Low Fidelity Wireframe
+<img width="1125" alt="Screenshot 2025-04-03 at 3 52 39 PM" src="https://github.com/user-attachments/assets/1010f1c1-da9c-45ae-8e10-ce000d45e7e3" />
+
+## 5. Digital Wirefrane
+![PHOTO-2025-04-03-15-53-21](https://github.com/user-attachments/assets/6ec7b9b6-f101-4a8d-add9-6ae41e04f5c5)
+
