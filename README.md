@@ -1,6 +1,29 @@
 # Stock Up Fresh 🛒📦
 
-## 1. User Stories (Required and Optional)
+## Table of Contents
+- [Overview](#overview)
+- [Product Spec](#product-spec)
+- [Wireframes](#wireframes)
+- [Schema](#schema)
+
+## Overview
+
+**Description**  
+Stock Up Fresh is an intelligent grocery management with integrated pantry tracking and smart, location-based reminders. It helps users efficiently track pantry inventory, and receive actionable reminders when they’re near relevant stores. Designed with Apple ecosystem integration in mind, Stock Up Fresh reduces food waste, saves time, and ensures you never forget an item again — all while offering a seamless iOS-native experience.
+
+**App Evaluation**  
+- **Category**: Productivity, Lifestyle  
+- **Mobile**: Mobile application only  
+- **Story**: Users can easily manage their grocery shopping experience, pantry stock and get location-based reminder when low on stock, and close to a grocery store.  
+- **Market**: Everyday shoppers, especially those who like to stay organized and manage their grocery shopping efficiently.  
+- **Habit**: Daily use (shopping, pantry management)  
+- **Scope**: Broad in features, from grocery list management to pantry tracking and location based reminders.
+
+---
+
+## Product Spec
+
+### 1. User Stories (Required and Optional)
 
 **Required Must-have Stories**  
 - 🔑 Users can login/signup  
@@ -16,7 +39,7 @@
 - 🤖 Users can receive smart suggestions based on usage patterns  
 - 👥 Collaborative lists for multiple users to manage a shared grocery list  
 
-## 2. Screen Archetypes
+### 2. Screen Archetypes
 
 - **Login/Signup Screen**  
   * 🔑 Users can login/signup  
@@ -46,7 +69,7 @@
   * 📊 Items have quantities and thresholds  
   * 🛒 When low, items are suggested on Grocery List  
 
-## 3. Navigation
+### 3. Navigation
 
 **Tab Navigation** (Bottom Navigation Tabs)  
 - 🛒 Grocery List (Home)  
@@ -72,13 +95,19 @@
   * -> 🔙 Return to previous screen  
 
 - **Settings/Profile**  
-  * -> ⚙️ Manage account, reminders, calendar, and inventory thresholds
+  * -> ⚙️ Manage account, reminders, calendar, and inventory thresholds  
 
-## 4. Low Fidelity Wireframe
+---
+
+## Wireframes
+
+**Low Fidelity Wireframe**
 <img width="1125" alt="Screenshot 2025-04-03 at 3 52 39 PM" src="https://github.com/user-attachments/assets/1010f1c1-da9c-45ae-8e10-ce000d45e7e3" />
 
-## 5. Digital Wirefrane
+**Digital Wireframes & Mockups**  
 ![PHOTO-2025-04-03-15-53-21](https://github.com/user-attachments/assets/6ec7b9b6-f101-4a8d-add9-6ae41e04f5c5)
+
+---
 
 ## Schema
 
@@ -141,4 +170,3 @@
 - **Location-based Reminders**  
   [POST] /reminders/locations - To send a location-based reminder when the user is near a relevant store  
   [GET] /location/{user_id} - To get the current location of the user and check if reminders need to be triggered
-
