@@ -80,3 +80,65 @@
 ## 5. Digital Wirefrane
 ![PHOTO-2025-04-03-15-53-21](https://github.com/user-attachments/assets/6ec7b9b6-f101-4a8d-add9-6ae41e04f5c5)
 
+## Schema
+
+### Models
+
+**User**  
+| Property   | Type    | Description                               |
+|------------|---------|-------------------------------------------|
+| username   | String  | Unique ID for the user                    |
+| password   | String  | User's password for login authentication  |
+| latitude   | Float   | User’s current latitude (for location-based reminders) |
+| longitude  | Float   | User’s current longitude (for location-based reminders) |
+
+**Item**  
+| Property    | Type    | Description                               |
+|-------------|---------|-------------------------------------------|
+| name        | String  | Name of the grocery item                 |
+| category    | String  | Category (produce, dairy, etc.)           |
+| barcode     | String  | Barcode of the item (for scanning)       |
+| quantity    | Integer | Stock quantity available in pantry       |
+| threshold   | Integer | Threshold for when a low-stock alert triggers |
+| store_location | String | Location of the store associated with the item |
+
+**Location** (New)  
+| Property     | Type    | Description                              |
+|--------------|---------|------------------------------------------|
+| store_name   | String  | Name of the store                       |
+| store_address| String  | Address of the store                    |
+| latitude     | Float   | Latitude of the store                   |
+| longitude    | Float   | Longitude of the store                  |
+
+---
+
+## Networking
+
+**List of network requests by screen**
+
+- **Login/Signup Screen**  
+  [POST] /users - To create a new user  
+  [POST] /login - To authenticate and login the user  
+
+- **Grocery List Screen**  
+  [GET] /grocery_list - To retrieve user's grocery list  
+  [POST] /grocery_list - To add an item to the grocery list  
+  [PUT] /grocery_list/{id} - To update an item in the list  
+  [DELETE] /grocery_list/{id} - To remove an item from the list  
+
+- **My Kitchen Screen**  
+  [GET] /pantry - To retrieve items in the pantry  
+  [POST] /pantry - To add an item to the pantry  
+  [PUT] /pantry/{id} - To update the stock of an item  
+  [DELETE] /pantry/{id} - To remove an item from the pantry  
+
+- **Barcode Scanner Screen**  
+  [GET] /items/{barcode} - To retrieve item details by barcode  
+
+- **Settings/Profile Screen**  
+  [PUT] /settings - To update user preferences, reminders, and notifications  
+
+- **Location-based Reminders**  
+  [POST] /reminders/locations - To send a location-based reminder when the user is near a relevant store  
+  [GET] /location/{user_id} - To get the current location of the user and check if reminders need to be triggered
+
