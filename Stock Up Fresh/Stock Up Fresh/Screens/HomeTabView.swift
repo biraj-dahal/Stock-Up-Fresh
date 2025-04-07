@@ -56,20 +56,3 @@ struct HomeTabView: View {
 
 
 
-
-    // Sample grocery items
-    // Only to have an idea of how it will look later...
-//        @State private var groceryItems: [String] = [
-//            "Apples",
-//            "Bananas",
-//            "Carrots",
-//            "Milk",
-//            "Bread",
-//            "Eggs"
-//        ]
-//    var body: some View {
-//        NavigationView{
-//            List {
-//                            ForEach(groceryItems, id: \.self) { item in
-//                                Text(item)
-//                                    .foregroundCo
