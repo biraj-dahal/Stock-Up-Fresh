@@ -142,7 +142,7 @@ struct SignupScreen: View {
                 .navigationBarHidden(true)
                 .alert(isPresented: $showAlert) {
                     Alert(
-                        title: Text("Sign In"),
+                        title: Text("Sign Up"),
                         message: Text(alertMessage),
                         dismissButton: .default(Text("OK"))
                     )
@@ -173,7 +173,7 @@ struct SignupScreen: View {
                 showAlert = true
                 return
             }
-            guard !reenter_password.elementsEqual(password) else {
+            guard reenter_password.elementsEqual(password) else {
                 alertMessage = "Passwords do not match"
                 showAlert = true
                 return
