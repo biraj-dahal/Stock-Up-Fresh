@@ -4,19 +4,7 @@
 //
 //  Created by Noah Seid on 4/7/25.
 //
-
 import SwiftUI
-
-struct PantryItem: Identifiable {
-    let id = UUID()
-    let name: String
-    let quantity: Int
-    let threshold: Int
-    
-    var isLow: Bool {
-        quantity <= threshold
-    }
-}
 
 struct MyKitchenView: View {
     // Sample data (replace with network or DB source)
