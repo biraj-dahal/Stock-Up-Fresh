@@ -4,19 +4,22 @@
 //
 //  Created by Noah Seid on 4/7/25.
 //
-
 import SwiftUI
 
 struct GroceryListView: View {
-    @State private var groceryItems: [String] = [
-        "Apples",
-        "Milk"
+    // Static sectioned items representing store categories
+    let groceryItemsBySection: [String: [String]] = [
+        "Produce": ["Apples", "Spinach", "Carrots"],
+        "Dairy": ["Milk", "Cheese", "Yogurt"],
+        "Bakery": ["Bread", "Bagels"],
+        "Meat & Seafood": ["Chicken Breast", "Salmon"],
+        "Pantry": ["Rice", "Pasta", "Canned Beans"]
     ]
     
     var body: some View {
         NavigationView {
             ZStack {
-                if groceryItems.isEmpty {
+                if groceryItemsBySection.isEmpty {
                     VStack(spacing: 12) {
                         Image(systemName: "cart")
                             .font(.system(size: 48))
@@ -31,12 +34,18 @@ struct GroceryListView: View {
                     .multilineTextAlignment(.center)
                 } else {
                     List {
-                        ForEach(groceryItems, id: \.self) { item in
-                            Text(item)
-                                .foregroundColor(.appOlive)
-                                .padding(8)
-                                .background(Color.appBeige)
-                                .cornerRadius(8)
+                        ForEach(groceryItemsBySection.keys.sorted(), id: \.self) { section in
+                            Section(header: Text(section)
+                                .font(.headline)
+                                .foregroundColor(.appOlive)) {
+                                    ForEach(groceryItemsBySection[section]!, id: \.self) { item in
+                                        Text(item)
+                                            .foregroundColor(.appOlive)
+                                            .padding(8)
+                                            .background(Color.appBeige)
+                                            .cornerRadius(8)
+                                    }
+                                }
                         }
                     }
                     .listStyle(InsetGroupedListStyle())
@@ -72,4 +81,3 @@ struct GroceryListView: View {
 #Preview {
     GroceryListView()
 }
-
