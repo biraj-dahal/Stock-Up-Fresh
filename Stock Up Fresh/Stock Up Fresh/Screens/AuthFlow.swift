@@ -8,8 +8,24 @@
 import SwiftUI
 
 struct AuthFlow: View {
+    @State private var path: [AuthDestination] = []
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack(path: $path) {
+            LoginScreen(path: $path)
+                .navigationDestination(for: AuthDestination.self) { destination in
+                    switch destination {
+                    case .signup:
+                        SignupScreen(path: $path)
+                    case .groceryList:
+                        GroceryListView()
+                            .navigationBarBackButtonHidden(true)
+                    case  .none:
+                        EmptyView()
+                        
+                    }
+                }
+        }
     }
 }
 
