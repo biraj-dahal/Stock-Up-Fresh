@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseCore
 import FirebaseAuth
+import FirebaseFirestore
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,
@@ -22,7 +23,6 @@ struct Stock_Up_FreshApp: App {
     @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
     var body: some Scene {
         WindowGroup {
             if isLoggedIn && Auth.auth().currentUser != nil {
