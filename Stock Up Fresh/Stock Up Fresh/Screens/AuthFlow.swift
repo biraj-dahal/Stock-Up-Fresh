@@ -20,9 +20,10 @@ struct AuthFlow: View {
                     case .groceryList:
                         GroceryListView()
                             .navigationBarBackButtonHidden(true)
+                    case .authFlow:
+                        HomeTabView()
                     case  .none:
                         EmptyView()
-                        
                     }
                 }
         }

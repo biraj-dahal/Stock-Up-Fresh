@@ -26,7 +26,7 @@ struct Stock_Up_FreshApp: App {
     var body: some Scene {
         WindowGroup {
             if isLoggedIn && Auth.auth().currentUser != nil {
-                GroceryListView()
+                HomeTabView()
                 
             } else {
                 AuthFlow()

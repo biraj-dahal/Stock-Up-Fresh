@@ -161,7 +161,7 @@ struct LoginScreen: View {
                 showAlert = true
             } else {
                 UserDefaults.standard.set(true, forKey: "isLoggedIn")
-                path.append(.groceryList)
+                path.append(.authFlow)
             }
         }
     }

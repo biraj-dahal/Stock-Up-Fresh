@@ -10,4 +10,5 @@ enum AuthDestination: Hashable {
     case groceryList
     case signup
     case none
+    case authFlow
 }

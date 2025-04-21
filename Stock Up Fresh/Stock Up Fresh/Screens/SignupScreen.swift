@@ -195,7 +195,7 @@ struct SignupScreen: View {
                 UserDefaults.standard.set(true, forKey: "isLoggedIn")
                 
                 path.removeAll()
-                path.append(.groceryList)
+                path.append(.authFlow)
             }
         }
     }
