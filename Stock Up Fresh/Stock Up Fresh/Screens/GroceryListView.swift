@@ -1,21 +1,11 @@
-//
-//  GroceryListView.swift
-//  Stock Up Fresh
-//
-//  Created by Noah Seid on 4/7/25.
-//
 import SwiftUI
+import FirebaseCore
+import FirebaseAuth
+import FirebaseFirestore
 
 struct GroceryListView: View {
-    // Static sectioned items representing store categories
-    let groceryItemsBySection: [String: [String]] = [
-        "Produce": ["Apples", "Spinach", "Carrots"],
-        "Dairy": ["Milk", "Cheese", "Yogurt"],
-        "Bakery": ["Bread", "Bagels"],
-        "Meat & Seafood": ["Chicken Breast", "Salmon"],
-        "Pantry": ["Rice", "Pasta", "Canned Beans"]
-    ]
-    
+    @State private var groceryItemsBySection: [String: [PantryItem]] = [:]
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -24,10 +14,10 @@ struct GroceryListView: View {
                         Image(systemName: "cart")
                             .font(.system(size: 48))
                             .foregroundColor(.appOlive)
-                        Text("Your grocery list is empty!")
+                        Text("You're all stocked up!")
                             .font(.title3)
                             .foregroundColor(.appOlive)
-                        Text("Tap the '+' button to start adding items.")
+                        Text("No items need to be purchased.")
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
@@ -38,8 +28,8 @@ struct GroceryListView: View {
                             Section(header: Text(section)
                                 .font(.headline)
                                 .foregroundColor(.appOlive)) {
-                                    ForEach(groceryItemsBySection[section]!, id: \.self) { item in
-                                        Text(item)
+                                    ForEach(groceryItemsBySection[section] ?? []) { item in
+                                        Text(item.name)
                                             .foregroundColor(.appOlive)
                                             .padding(8)
                                             .background(Color.appBeige)
@@ -52,32 +42,38 @@ struct GroceryListView: View {
                     .scrollContentBackground(.hidden)
                 }
 
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            print("Add new item tapped")
-                        }) {
-                            Image(systemName: "plus")
-                                .font(.system(size: 24))
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.appOlive)
-                                .clipShape(Circle())
-                                .shadow(radius: 4)
-                        }
-                        .padding()
-                        .accessibilityLabel("Add grocery item")
-                    }
-                }
             }
             .navigationTitle("Grocery List")
             .background(Color.appBeige.edgesIgnoringSafeArea(.all))
         }
+        .onAppear(perform: fetchGroceryItemsFromFirestore)
     }
-}
 
-#Preview {
-    GroceryListView()
+    private func fetchGroceryItemsFromFirestore() {
+        let db = Firestore.firestore()
+
+        db.collection("pantry").getDocuments { snapshot, error in
+            if let error = error {
+                print("❌ Error fetching pantry items: \(error)")
+                return
+            }
+
+            guard let documents = snapshot?.documents else { return }
+
+            var categorized: [String: [PantryItem]] = [:]
+
+            for doc in documents {
+                do {
+                    let item = try doc.data(as: PantryItem.self)
+                    if item.quantity < item.threshold {
+                        categorized[item.type, default: []].append(item)
+                    }
+                } catch {
+                    print("⚠️ Could not decode item: \(error)")
+                }
+            }
+
+            groceryItemsBySection = categorized
+        }
+    }
 }
