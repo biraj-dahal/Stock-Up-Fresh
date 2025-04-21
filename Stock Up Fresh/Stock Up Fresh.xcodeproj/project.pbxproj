@@ -295,7 +295,11 @@
 				DEVELOPMENT_TEAM = PXMQVM7LXJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Stock-Up-Fresh-Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need camera access to scan barcodes.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "“Always” permission lets us trigger your reminders even if the app is in the background.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "“Always” permission lets us send notifications when you enter a store region.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to remind you when you’re near your favorite grocery stores.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -324,7 +328,11 @@
 				DEVELOPMENT_TEAM = PXMQVM7LXJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Stock-Up-Fresh-Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need camera access to scan barcodes.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "“Always” permission lets us trigger your reminders even if the app is in the background.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "“Always” permission lets us send notifications when you enter a store region.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to remind you when you’re near your favorite grocery stores.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

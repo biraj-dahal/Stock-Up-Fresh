@@ -21,12 +21,23 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct Stock_Up_FreshApp: App {
     @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
+    @StateObject private var reminderMgr = LocationReminderManager.shared
+    @StateObject private var pantrySvc   = PantryService.shared
+    @StateObject private var storeRepo   = StoreRepository.shared
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     var body: some Scene {
         WindowGroup {
             if isLoggedIn && Auth.auth().currentUser != nil {
                 HomeTabView()
+                    .onAppear {
+                            // once stores are loaded from your repo:
+                            storeRepo.$stores
+                              .sink { stores in
+                                reminderMgr.startMonitoring(stores: stores)
+                              }
+                              .store(in: &reminderMgr.cancellables)
+                          }
                 
             } else {
                 AuthFlow()
