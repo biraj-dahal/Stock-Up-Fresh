@@ -30,6 +30,9 @@ struct Stock_Up_FreshApp: App {
         WindowGroup {
             if isLoggedIn && Auth.auth().currentUser != nil {
                 HomeTabView()
+                    .environmentObject(pantrySvc)
+                    .environmentObject(storeRepo)
+                    .environmentObject(reminderMgr)
                     .onAppear {
                             // once stores are loaded from your repo:
                             storeRepo.$stores
@@ -43,5 +46,6 @@ struct Stock_Up_FreshApp: App {
                 AuthFlow()
             }
         }
+        
     }
 }
