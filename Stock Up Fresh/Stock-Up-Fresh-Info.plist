@@ -2,7 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>GoogleApiKey</key>
+	<key>GoogleAPIKey</key>
 	<string>AIzaSyC_2SNdokmBIThp-Xo8r88W1gmYLQCtnCE</string>
 </dict>
 </plist>
