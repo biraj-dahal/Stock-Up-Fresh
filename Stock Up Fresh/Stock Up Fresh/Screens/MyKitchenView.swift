@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreLocation
 import FirebaseFirestore
+import FirebaseAuth
 
 struct MyKitchenView: View {
     // MARK: – Dependencies
@@ -87,22 +88,19 @@ struct MyKitchenView: View {
 
     // MARK: – Fetch Pantry Items
     private func fetchPantryItems() {
-        let db = Firestore.firestore()
-        db.collection("pantry").getDocuments { snap, err in
-            if let err = err {
-                print("❌ Error fetching pantry items:", err)
-                return
-            }
-            guard let docs = snap?.documents else { return }
-            var categorized = [String: [PantryItem]]()
-            for doc in docs {
-                if let item = try? doc.data(as: PantryItem.self) {
-                    categorized[item.type, default: []].append(item)
+            guard let uid = Auth.auth().currentUser?.uid else { return }
+            let db = Firestore.firestore().collection("users").document(uid).collection("pantry")
+            db.getDocuments { snap, _ in
+                guard let docs = snap?.documents else { return }
+                var cat: [String: [PantryItem]] = [:]
+                for doc in docs {
+                    if let item = try? doc.data(as: PantryItem.self) {
+                        cat[item.type, default: []].append(item)
+                    }
                 }
+                pantryItemsByCategory = cat
             }
-            pantryItemsByCategory = categorized
         }
-    }
 
     // MARK: – Row ViewBuilder
     @ViewBuilder
