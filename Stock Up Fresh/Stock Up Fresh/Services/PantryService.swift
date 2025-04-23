@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseFirestore
+import FirebaseAuth
 import Combine
 
 /// Manages real-time CRUD operations for PantryItem objects in Firestore.
@@ -28,67 +29,40 @@ final class PantryService: ObservableObject {
     
     /// Begins listening to the 'PantryItems' collection for live updates.
     func fetchPantryItems() {
-        listener?.remove()
-        listener = db.collection("PantryItems")
-            .order(by: "name", descending: false)
-            .addSnapshotListener { [weak self] snapshot, error in
-                guard let self = self else { return }
-                if let error = error {
-                    print("Error fetching pantry items:", error)
-                    return
+            listener?.remove()
+            guard let uid = Auth.auth().currentUser?.uid else { return }
+            listener = Firestore.firestore()
+                .collection("users").document(uid).collection("pantry")
+                .order(by: "name")
+                .addSnapshotListener { snap, _ in
+                    self.items = snap?.documents.compactMap { try? $0.data(as: PantryItem.self) } ?? []
                 }
-                self.items = snapshot?.documents.compactMap { doc in
-                    try? doc.data(as: PantryItem.self)
-                } ?? []
+        }
+
+        func addItem(_ item: PantryItem) {
+            guard let uid = Auth.auth().currentUser?.uid,
+                  let id = item.id else { return }
+            try? Firestore.firestore().collection("users").document(uid).collection("pantry").document(id).setData(from: item)
+        }
+
+        func updateItem(_ item: PantryItem) {
+            addItem(item)
+        }
+
+    // PantryService.swift
+
+    func deleteItem(_ item: PantryItem) {
+        guard let uid = Auth.auth().currentUser?.uid,
+              let id = item.id else { return }
+        let db = Firestore.firestore()
+            .collection("users")
+            .document(uid)
+            .collection("pantry")
+        db.document(id).delete { error in
+            if let error = error {
+                print("❌ Error deleting pantry item: \(error)")
             }
-    }
-    
-    /// Adds a new PantryItem to Firestore.
-    func addItem(_ item: PantryItem, completion: ((Error?) -> Void)? = nil) {
-        do {
-            _ = try db.collection("PantryItems").addDocument(from: item) { error in
-                completion?(error)
-            }
-        } catch {
-            completion?(error)
         }
     }
-    
-    /// Updates an existing PantryItem in Firestore.
-    func updateItem(_ item: PantryItem, completion: ((Error?) -> Void)? = nil) {
-        guard let id = item.id else {
-            completion?(NSError(
-                domain: "",
-                code: -1,
-                userInfo: [NSLocalizedDescriptionKey: "Item has no ID"]
-            ))
-            return
-        }
-        do {
-            try db.collection("PantryItems")
-                .document(id)
-                .setData(from: item, merge: true) { error in
-                    completion?(error)
-                }
-        } catch {
-            completion?(error)
-        }
-    }
-    
-    /// Deletes a PantryItem from Firestore.
-    func deleteItem(_ item: PantryItem, completion: ((Error?) -> Void)? = nil) {
-        guard let id = item.id else {
-            completion?(NSError(
-                domain: "",
-                code: -1,
-                userInfo: [NSLocalizedDescriptionKey: "Item has no ID"]
-            ))
-            return
-        }
-        db.collection("PantryItems")
-          .document(id)
-          .delete { error in
-            completion?(error)
-          }
-    }
+
 }
