@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct SettingsView: View {
     @State private var lowStockAlertsEnabled = true
@@ -53,13 +54,26 @@ struct SettingsView: View {
 }
 
 struct ManageAccountView: View {
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var authManager: AuthManager
+
     var body: some View {
-        ZStack {
-            Color.appBeige.ignoresSafeArea()
-            Text("Manage your account here.")
-                .foregroundColor(.appOlive)
+        Form {
+            Section(header: Text("Account Actions")) {
+                Button(role: .destructive) {
+                    authManager.signOut()
+                } label: {
+                    HStack {
+                        Image(systemName: "power")
+                        Text("Sign Out")
+                    }
+                    .foregroundColor(.red)
+                }
+            }
         }
-        .navigationTitle("Account")
+        .background(Color.appBeige)
+        .navigationTitle("Manage Account")
+        
     }
 }
 

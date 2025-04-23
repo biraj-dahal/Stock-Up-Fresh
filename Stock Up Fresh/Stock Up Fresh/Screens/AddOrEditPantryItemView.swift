@@ -16,6 +16,7 @@ struct AddOrEditPantryItemView: View {
     @State private var quantity: Int = 0
     @State private var threshold: Int = 1
     @State private var type: String = ""
+    @State private var showingDeleteAlert = false
 
     private let types = ["Produce", "Dairy", "Meat & Seafood", "Bakery", "Essential"]
 
@@ -32,6 +33,18 @@ struct AddOrEditPantryItemView: View {
                         }
                     }
                 }
+                if itemToEdit != nil {
+                                    Section {
+                                        Button(role: .destructive) {
+                                            showingDeleteAlert = true
+                                        } label: {
+                                            HStack {
+                                                Image(systemName: "trash.fill")
+                                                Text("Delete Item")
+                                            }
+                                        }
+                                    }
+                                }
             }
             .navigationTitle(itemToEdit == nil ? "Add Item" : "Edit Item")
             .toolbar {
@@ -54,6 +67,14 @@ struct AddOrEditPantryItemView: View {
                     type = item.type
                 }
             }
+            .alert("Delete Item?", isPresented: $showingDeleteAlert) {
+                Button("Delete", role: .destructive) {
+                    deleteItem()
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This action cannot be undone.")
+            }
         }
     }
 
@@ -74,4 +95,16 @@ struct AddOrEditPantryItemView: View {
             print("❌ Failed to save pantry item: \(error)")
         }
     }
+    
+    private func deleteItem() {
+        guard let item = itemToEdit?.id else { return }
+            let db = Firestore.firestore()
+        db.collection("pantry").document(item).delete { error in
+                if let error = error {
+                    print("❌ Error deleting pantry item: \(error)")
+                } else {
+                    dismiss()
+                }
+            }
+        }
 }
