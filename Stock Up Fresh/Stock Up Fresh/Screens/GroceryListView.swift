@@ -48,32 +48,23 @@ struct GroceryListView: View {
         }
         .onAppear(perform: fetchGroceryItemsFromFirestore)
     }
+    //fetchGroceryItemsFromFirestore
 
     private func fetchGroceryItemsFromFirestore() {
-        let db = Firestore.firestore()
-
-        db.collection("pantry").getDocuments { snapshot, error in
-            if let error = error {
-                print("❌ Error fetching pantry items: \(error)")
-                return
-            }
-
-            guard let documents = snapshot?.documents else { return }
-
-            var categorized: [String: [PantryItem]] = [:]
-
-            for doc in documents {
-                do {
-                    let item = try doc.data(as: PantryItem.self)
-                    if item.quantity < item.threshold {
-                        categorized[item.type, default: []].append(item)
+            guard let uid = Auth.auth().currentUser?.uid else { return }
+            let db = Firestore.firestore()
+                .collection("users")
+                .document(uid)
+                .collection("pantry")
+            db.getDocuments { snap, _ in
+                guard let docs = snap?.documents else { return }
+                var cat: [String: [PantryItem]] = [:]
+                for doc in docs {
+                    if let item = try? doc.data(as: PantryItem.self), item.quantity < item.threshold {
+                        cat[item.type, default: []].append(item)
                     }
-                } catch {
-                    print("⚠️ Could not decode item: \(error)")
                 }
+                groceryItemsBySection = cat
             }
-
-            groceryItemsBySection = categorized
         }
-    }
 }
