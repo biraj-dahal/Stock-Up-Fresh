@@ -28,8 +28,9 @@ struct MyKitchenView: View {
                 // Pantry List
                 List {
                     if pantryItemsByCategory.isEmpty {
-                        Text("Loading pantry items...")
+                        Text("Your pantry is empty.")
                             .foregroundColor(.gray)
+                            .italic()
                     } else {
                         ForEach(pantryItemsByCategory.keys.sorted(), id: \.self) { category in
                             Section(header:
