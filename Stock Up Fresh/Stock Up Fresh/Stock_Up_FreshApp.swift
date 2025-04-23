@@ -27,6 +27,7 @@ struct Stock_Up_FreshApp: App {
     @StateObject private var pantrySvc   = PantryService.shared
     @StateObject private var reminderMgr = LocationReminderManager.shared
     @StateObject private var storeRepo = StoreRepository.shared
+    @StateObject private var authManager = AuthManager()
 
     var body: some Scene {
         WindowGroup {
@@ -55,5 +56,6 @@ struct Stock_Up_FreshApp: App {
                 AuthFlow()
             }
         }
+        .environmentObject(authManager)
     }
 }

@@ -7,18 +7,20 @@
 
 import SwiftUI
 import FirebaseFirestore
+import FirebaseAuth
 
 struct AddOrEditPantryItemView: View {
     @Environment(\.dismiss) var dismiss
     var itemToEdit: PantryItem?
-
+    
     @State private var name: String = ""
     @State private var quantity: Int = 0
     @State private var threshold: Int = 1
     @State private var type: String = ""
-
+    @State private var showingDeleteAlert = false
+    
     private let types = ["Produce", "Dairy", "Meat & Seafood", "Bakery", "Essential"]
-
+    
     var body: some View {
         NavigationView {
             Form {
@@ -29,6 +31,18 @@ struct AddOrEditPantryItemView: View {
                     Picker("Category", selection: $type) {
                         ForEach(types, id: \.self) { category in
                             Text(category)
+                        }
+                    }
+                }
+                if itemToEdit != nil {
+                    Section {
+                        Button(role: .destructive) {
+                            showingDeleteAlert = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "trash.fill")
+                                Text("Delete Item")
+                            }
                         }
                     }
                 }
@@ -54,24 +68,37 @@ struct AddOrEditPantryItemView: View {
                     type = item.type
                 }
             }
+            .alert("Delete Item?", isPresented: $showingDeleteAlert) {
+                Button("Delete", role: .destructive) {
+                    deleteItem()
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This action cannot be undone.")
+            }
         }
     }
-
+    
     private func saveItem() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
         let db = Firestore.firestore()
-        let pantryItem = PantryItem(
-            id: itemToEdit?.id ?? UUID().uuidString,
-            name: name,
-            quantity: quantity,
-            threshold: threshold,
-            type: type
-        )
-
-        do {
-            try db.collection("pantry").document(pantryItem.id!).setData(from: pantryItem)
-            dismiss()
-        } catch {
-            print("❌ Failed to save pantry item: \(error)")
-        }
+            .collection("users")
+            .document(uid)
+            .collection("pantry")
+        let id = itemToEdit?.id ?? UUID().uuidString
+        let item = PantryItem(id: id, name: name, quantity: quantity, threshold: threshold, type: type)
+        try? db.document(id).setData(from: item)
+        dismiss()
+    }
+    
+    private func deleteItem() {
+        guard let uid = Auth.auth().currentUser?.uid,
+              let id = itemToEdit?.id else { return }
+        let db = Firestore.firestore()
+            .collection("users")
+            .document(uid)
+            .collection("pantry")
+        db.document(id).delete()
+        dismiss()
     }
 }

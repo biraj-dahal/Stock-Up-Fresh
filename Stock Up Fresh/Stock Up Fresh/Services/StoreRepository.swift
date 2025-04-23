@@ -9,12 +9,19 @@ import Foundation
 import FirebaseFirestore
 
 import Combine
+import FirebaseAuth
 
 final class StoreRepository: ObservableObject {
     static let shared = StoreRepository()
     @Published var stores: [StoreLocation] = []
 
-    private let db = Firestore.firestore()
+    private var db: CollectionReference? {
+            guard let uid = Auth.auth().currentUser?.uid else { return nil }
+            return Firestore.firestore()
+                .collection("users")
+                .document(uid)
+                .collection("stores")
+        }
     private var listener: ListenerRegistration?
 
     private init() {
@@ -23,51 +30,25 @@ final class StoreRepository: ObservableObject {
 
     /// Overwrite everything in “Stores” with `newStores`.
     func replaceAll(_ newStores: [StoreLocation]) {
-        let batch = db.batch()
-        let colRef = db.collection("Stores")
-
-        colRef.getDocuments { snapshot, error in
-            if let error = error {
-                print("Failed to fetch old stores:", error)
-                return
-            }
-
-            snapshot?.documents.forEach { batch.deleteDocument($0.reference) }
-
-            newStores.forEach { store in
-                let docRef = colRef.document(store.id)
-                do {
-                    try batch.setData(from: store, forDocument: docRef)
-                } catch {
-                    print("Error writing store \(store.name):", error)
+            guard let db = db else { return }
+            let batch = Firestore.firestore().batch()
+            db.getDocuments { snap, _ in
+                snap?.documents.forEach { batch.deleteDocument($0.reference) }
+                newStores.forEach { store in
+                    let ref = db.document(store.id)
+                    try? batch.setData(from: store, forDocument: ref)
                 }
-            }
-
-            batch.commit { commitError in
-                if let commitError = commitError {
-                    print("Batch commit failed:", commitError)
-                } else {
-                    DispatchQueue.main.async {
-                        self.stores = newStores
-                        print("✅ StoreRepository now has \(newStores.count) stores")
-                    }
-                }
+                batch.commit { _ in self.stores = newStores }
             }
         }
-    }
 
-    /// Listen to Firestore “Stores” collection in real time.
-    func fetchAll() {
-        listener?.remove()
-        listener = db.collection("Stores")
-            .addSnapshotListener { snapshot, error in
-                if let error = error {
-                    print("Error listening for stores:", error)
-                    return
-                }
-                self.stores = snapshot?.documents.compactMap {
+        func fetchAll() {
+            listener?.remove()
+            guard let db = db else { return }
+            listener = db.addSnapshotListener { snap, _ in
+                self.stores = snap?.documents.compactMap {
                     try? $0.data(as: StoreLocation.self)
                 } ?? []
             }
+        }
     }
-}
