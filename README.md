@@ -29,15 +29,15 @@ Stock Up Fresh is an intelligent grocery management with integrated pantry track
 - [x] 🔑 Users can login/signup  
 - [x] 📝 Users can create and manage a grocery list  
 - [x] 🏷️ Grocery list auto-sorts items by store sections (produce, dairy, etc.)  
-- [ ] 📱 Users can scan barcodes to quickly add items to the list or pantry  
+- [x] 📱 Users can scan barcodes to quickly add items to the list or pantry  
 - [x] 🍽️ Users can track their My Kitchen  
 - [x] 🔴 Items running low in pantry are suggested in the grocery list  
 - [x] ⏰ Users can receive reminders when near a store  
 
 **Optional Nice-to-have Stories**  
-- [ ] 📅 Users can integrate low-stock items with Apple Calendar as events  
+- [x] 📅 Users can integrate low-stock items with Apple Calendar as events  
 - [ ] 🤖 Users can receive smart suggestions based on usage patterns  
-- [ ] 👥 Collaborative lists for multiple users to manage a shared grocery list  
+- [x] 👥 Collaborative lists for multiple users to manage a shared grocery list  
 
 ### 2. Screen Archetypes
 
