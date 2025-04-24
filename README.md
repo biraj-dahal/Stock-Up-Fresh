@@ -116,9 +116,11 @@ Stock Up Fresh is an intelligent grocery management with integrated pantry track
 
 ![versiong (1) (2)](https://github.com/user-attachments/assets/0f30981a-6411-4db6-b584-0bc330ec5e3d)
 
-* Milestone 3 
+* Milestone 3
 
-![Milestone 3](https://github.com/user-attachments/assets/cca5add8-6166-4f0a-89b3-c360f435da9c)
+![FinalDemoApp](https://github.com/user-attachments/assets/f564386a-0a64-4499-8e4d-86bd97524ba4)
+
+
 
 ---
 
